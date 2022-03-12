@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class euler {
     public double finalY;
@@ -35,12 +36,16 @@ public class euler {
      */
     public double grassFriction(){
         Random rand = new Random(); //instance of random class
+
         double max=0.1;
         double min=0.05;
         double random_double=0.0;
+        double randomNum=0.0;
         for (int i = 0; i < 100000; i++) {
-            random_double=Math.random()*(max-min);
-            System.out.println(random_double);
+//            random_double=Math.random()*(max-min);
+            randomNum = ThreadLocalRandom.current().nextDouble(0.049999999999, 0.100000000000001);
+            System.out.println(randomNum);
+
         }
         return random_double;
     }
@@ -85,6 +90,6 @@ public class euler {
     public static void main(String[] args) {
         euler euler = new euler();
 //        euler.EulerCalculation(100,0.01);
-
+        euler.grassFriction();
     }
 }
