@@ -1,4 +1,3 @@
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class euler {
@@ -15,10 +14,11 @@ public class euler {
     public double initialVelY;
     public double xMov;
     public double yMov;
+    public double mass;
     public euler() {
         this.initialX=0;// Initial condition of X
         this.initialY=1; // Initial condition of Y
-        this.finalX=1000;
+        this.finalX=10;
         this.finalY=0.0;
         this.steps=1000; // The higher, the better
         this.stepSize=0.0001; // The smaller, the better
@@ -28,28 +28,13 @@ public class euler {
         this.initialVelY=initialVelY;
         this.xMov=xMov;
         this.yMov=yMov;
+        this.mass=0.0459;
     }
 
-    /*
-    This is a work in process.
-    Somehow i can't figure out how to get the random in between my bounds.
-     */
     public double grassFriction(){
-        Random rand = new Random(); //instance of random class
-
-        double max=0.1;
-        double min=0.05;
-        double random_double=0.0;
-        double randomNum=0.0;
-        for (int i = 0; i < 100000; i++) {
-//            random_double=Math.random()*(max-min);
-            randomNum = ThreadLocalRandom.current().nextDouble(0.049999999999, 0.100000000000001);
-            System.out.println(randomNum);
-
-        }
-        return random_double;
+        return ThreadLocalRandom.current().nextDouble(0.049999999999, 0.100000000000001);
     }
-    public double EulerCalculation(double x, double h){
+    public double eulerCalculation(double x, double h){
         while (initialX<finalX){
                 root=initialX+stepSize;
 
@@ -85,16 +70,19 @@ public class euler {
     /*
     Calculate acceleration of X and Y
      */
-    public void ballMoX(){
-        xMov=(-g*EulerCalculation(initialX,stepSize))-kfg*g*(initialVelX/sqrt(root(initialVelX)+root(initialVelY)));
+    public double  ballMovX(){
+        return xMov=(-g*eulerCalculation(initialX,stepSize))-grassFriction()*g*(initialVelX/sqrt(root(initialVelX)+root(initialVelY)));
     }
-    public void ballMovY(){
-        yMov=(-g*EulerCalculation(initialY,stepSize))-kfg*g*(initialVelX/sqrt(root(initialVelX)+root(initialVelY)));
+    public double  ballMovY(){
+        return yMov=(-g*eulerCalculation(initialY,stepSize))-grassFriction()*g*(initialVelX/sqrt(root(initialVelX)+root(initialVelY)));
     }
-
+    public double normalForce(){
+       return ((mass*g)/sqrt(1+(root(eulerCalculation(initialX, stepSize))+root(eulerCalculation(initialY, stepSize)))));
+    }
     public static void main(String[] args) {
         euler euler = new euler();
 //        euler.EulerCalculation(100,0.01);
-        euler.grassFriction();
+        euler.ballMovY();
+        euler.ballMovX();
     }
 }
