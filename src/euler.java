@@ -82,9 +82,14 @@ public class euler {
             return squareroot;
     }
     public double root(double num){return num*num;}
-    public void ballMov(){
-        xMov=(-g*EulerCalculation(initialX,stepSize))-kfg*g*(initialVelX/sqrt(root(initialVelX))*sqrt(root(initialVelY)));
-        yMov=(-g*EulerCalculation(initialY,stepSize))-kfg*g*(initialVelX/sqrt(root(initialVelX))*sqrt(root(initialVelY)));
+    /*
+    Calculate acceleration of X and Y
+     */
+    public void ballMoX(){
+        xMov=(-g*EulerCalculation(initialX,stepSize))-kfg*g*(initialVelX/sqrt(root(initialVelX)+root(initialVelY)));
+    }
+    public void ballMovY(){
+        yMov=(-g*EulerCalculation(initialY,stepSize))-kfg*g*(initialVelX/sqrt(root(initialVelX)+root(initialVelY)));
     }
 
     public static void main(String[] args) {
