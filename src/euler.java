@@ -76,8 +76,8 @@ public class euler {
     public double  ballAccelerationY(){
         return yMov=(-g*eulerCalculation(initialY,stepSize))-grassFriction()*g*(initialVelX/sqrt(root(initialVelX)+root(initialVelY)));
     }
-    public double normalForce(){
-       return ((mass*g)/sqrt(1+(root(eulerCalculation(initialX, stepSize))+root(eulerCalculation(initialY, stepSize)))));
+    public double normalForce(double a){
+       return ((mass*g*eulerCalculation(a, stepSize))/(1+(root(eulerCalculation(initialX, stepSize))+root(eulerCalculation(initialY, stepSize)))));
     }
     public double totalFriction(){
         double frictionMassGrav = (grassFriction()*mass*g);
@@ -86,6 +86,13 @@ public class euler {
         return ((-1)*(frictionMassGrav/(firstSquareRoots*secondSquareRoot)));
     }
 
+
+    public double finalMotionX(){
+        return normalForce(initialVelX) - totalFriction()*initialVelX;
+    }
+    public double finalMotionY(){
+        return normalForce(initialVelY) - totalFriction()*initialVelY;
+    }
     public static void main(String[] args) {
         euler euler = new euler();
     }
