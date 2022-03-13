@@ -1,6 +1,8 @@
 import java.util.concurrent.ThreadLocalRandom;
 
-public class euler {
+import static java.lang.Math.abs;
+
+public class engine {
     public double finalY;
     public double initialY;
     public double finalX;
@@ -15,15 +17,15 @@ public class euler {
     public double xMov;
     public double yMov;
     public double mass;
-    public euler() {
+    public engine() {
         this.initialX=0;// Initial condition of X
-        this.initialY=1; // Initial condition of Y
-        this.finalX=10;
-        this.finalY=0.0;
+        this.initialY=0; // Initial condition of Y
+        this.finalX=4;
+        this.finalY=1;
         this.steps=1000; // The higher, the better
-        this.stepSize=0.0001; // The smaller, the better
+        this.stepSize=0.1; // The smaller, the better
         this.root=root;
-        this.kfg=kfg;
+        this.kfg=0.1;
         this.initialVelX=initialVelX;
         this.initialVelY=initialVelY;
         this.xMov=xMov;
@@ -36,9 +38,13 @@ public class euler {
     }
     public double eulerCalculation(double x, double h){
         while (initialX<finalX){
-                root=initialX+stepSize;
+                root=initialX+h;
+            for (int i = 0; i < steps; i++) {
+                finalY=initialY+h*obtaionfXY(x);
+                System.out.println(initialX);
+                System.out.println(initialY);
+            }
 
-                finalY=initialY+stepSize*obtaionfXY(x);
 
                 initialX=root;
                 initialY=finalY;
@@ -93,7 +99,31 @@ public class euler {
     public double finalMotionY(){
         return normalForce(initialVelY) - totalFriction()*initialVelY;
     }
+    public double xyDivision(double x, double y){ return ((x-y)/2);}
+    public double rungeKutte(double x0, double y0, double h){
+        //Count number of iterations using step size or step height h
+        int count = (int)((finalX-x0)/h);
+        double k1, k2, k3, k4, k5;
+        // Iterate for number of iterations
+        double y = y0;
+        for (int i = 0; i <= count; i++) {
+            k1 = h * (xyDivision(x0, y));
+            k2 = h * (xyDivision(x0 + 0.5 * h, y + 0.5 * k1));
+            k3 = h * (xyDivision(x0 + 0.5 * h, y + 0.5 * k2));
+            k4 = h * (xyDivision(x0 + h, y + k3));
+            // Update next value of y
+            y = y + (1.0 / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4);
+            // Update next value of x
+            x0 = x0 + h;
+        }
+        return y;
+    }
+
+
+
     public static void main(String[] args) {
-        euler euler = new euler();
+        engine engine = new engine();
+//        System.out.println(euler.eulerCalculation(0, 0.1));
+        System.out.println(engine.rungeKutte(0, 1, 0.2));
     }
 }
