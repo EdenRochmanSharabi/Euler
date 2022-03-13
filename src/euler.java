@@ -70,19 +70,23 @@ public class euler {
     /*
     Calculate acceleration of X and Y
      */
-    public double  ballMovX(){
+    public double  ballAccelerationX(){
         return xMov=(-g*eulerCalculation(initialX,stepSize))-grassFriction()*g*(initialVelX/sqrt(root(initialVelX)+root(initialVelY)));
     }
-    public double  ballMovY(){
+    public double  ballAccelerationY(){
         return yMov=(-g*eulerCalculation(initialY,stepSize))-grassFriction()*g*(initialVelX/sqrt(root(initialVelX)+root(initialVelY)));
     }
     public double normalForce(){
        return ((mass*g)/sqrt(1+(root(eulerCalculation(initialX, stepSize))+root(eulerCalculation(initialY, stepSize)))));
     }
+    public double totalFriction(){
+        double frictionMassGrav = (grassFriction()*mass*g);
+        double firstSquareRoots = (sqrt(1+root(initialVelX)+root(initialVelY)));
+        double secondSquareRoot = sqrt(root(initialVelX)+root(initialVelY)+root(eulerCalculation(initialX, stepSize)*initialVelX+eulerCalculation(initialY, stepSize)*initialVelY));
+        return ((-1)*(frictionMassGrav/(firstSquareRoots*secondSquareRoot)));
+    }
+
     public static void main(String[] args) {
         euler euler = new euler();
-//        euler.EulerCalculation(100,0.01);
-        euler.ballMovY();
-        euler.ballMovX();
     }
 }
